@@ -1,118 +1,131 @@
 <template lang="html">
 
-    <div :class="classes + ' axis-blip'" :style="pos">
-        <div  class="blip" ></div>
-        <span  class="date" style="white-space: nowrap">{{ date }}</span>
-    </div>
+  <div v-tooltip="tooltip"  :class="classes + ' axis-blip'" :style="pos">
+    <div class="blip"></div>
+  </div>
 
 </template>
 
 <script lang="js">
-    import moment from 'moment';
-    import Util from "@/utils/Util";
-    export default  {
+    import { VTooltip, VPopover, VClosePopover } from 'v-tooltip';
+    import Moment from 'moment';
+    import Vue from 'vue';
+    import PositionRatio from '@/utils/PositionRatio';
+    Vue.directive('tooltip', VTooltip)
+    Vue.directive('close-popover', VClosePopover)
+    Vue.component('v-popover', VPopover)
+    export default {
         name: 'axis-blip',
-        props: ['date'],
+        props: ['date', 'tooltip'],
         mounted() {
         },
         inject: ['bar'],
         data() {
-            return {
-
-            }
+            return {};
         },
-        methods: {
-
-        },
+        methods: {},
         computed: {
-            classes : function(){
-                let left = Util.positionRatio(this.barStart, this.barEnd, this.blipDate);
-                if(left >= 100){
+            classes() {
+                const left = PositionRatio(this.barStart, this.barEnd, this.blipDate);
+                if (left >= 100) {
                     return 'right-aligned';
-                } else if(left < 1) {
+                }
+                if (left < 1) {
                     return 'left-aligned';
-                } else {
-                    return 'center-aligned';
                 }
+                return 'center-aligned';
             },
-            barStart : function(){
-                return new moment(this.bar.startDate);
+            barStart() {
+                return new Moment(this.bar.startDate);
             },
-            barEnd : function(){
-                return new moment(this.bar.endDate);
+            barEnd() {
+                return new Moment(this.bar.endDate);
             },
-            blipDate: function(){
-                return  new moment(this.date);
+            blipDate() {
+                return new Moment(this.date);
             },
-            pos : function () {
-                // I'm not sure if I should do this. My thinking is, the axis blip can ONLY exist within a TimelineAxis
+            pos() {
+                // I'm not sure if I should do this. My thinking is, the axis blip
+                // can ONLY exist within a TimelineAxis
                 // So it's a dependant on that element, so why bother passing props?
-                let left = Util.positionRatio(this.barStart, this.barEnd, this.blipDate);
-                if(left >= 100){
-                    return { right: 0 + '%' }
-                } else {
-                    return {
-                        left: left + '%'
-                    }
+                const left = PositionRatio(this.barStart, this.barEnd, this.blipDate);
+                if (left >= 100) {
+                    return { right: `${0}%` };
                 }
-
-
-            }
-        }
-    }
+                return {
+                    left: `${left}%`,
+                };
+            },
+        },
+    };
 </script>
 
 <style scoped lang="less">
-    @primary : #01c88b;
-    @blipBorder : darken( @primary, 0%);
-    @blipBackground: #fff;
-    .left-aligned {
-        .date {
-            text-align: left;
-        }
+  @import "less/_variables.less";
+
+  .left-aligned {
+    .date {
+      text-align: left;
     }
-    .right-aligned {
-        .date {
-            right: 0px;
-            text-align: right;
-        }
+    .blip {
+      margin-left:-8px;
     }
-    .center-aligned {
-        .date {
-            text-align: center;
-            position: absolute;
-            left:-40px;
-        }
+  }
+
+  .right-aligned {
+    .blip {
+      margin-right:-10px;
     }
     .date {
-        color:#AAA;
-        width: 100px;
-        text-align: center;
-        font-size:0.9em;
-        position: absolute;
-        bottom: 0px;
+      right: 0px;
+      text-align: right;
+    }
+  }
+
+  .center-aligned {
+    .date {
+      text-align: center;
+      position: absolute;
+      left: -40px;
+    }
+  }
+
+  .date {
+    color: #AAA;
+    width: 100px;
+    text-align: center;
+    font-size: 0.9em;
+    position: absolute;
+    bottom: 0px;
+  }
+
+  .axis-blip {
+    position: absolute;
+    height: 30px;
+
+
+    top: -25%;
+    transform:translateX(-6px);
+
+    &:hover .blip {
+      border-color: lighten(@blipBorder, 5%);
+      background: darken(@blipBackground, 5%);
+      border: 2px solid @primary;
+      transform: scale(2.0);
+    }
+
+    .blip {
+      border-radius: 10px;
+      border: 3px solid @primary;
+      box-shadow: 0px 0px 5px 5px rgba(255,255,255,0.3);
+      background: @blipBackground;
+      height: 12px;
+      width: 12px;
+      transition: all;
+      transition-duration: 0.4s;
+      margin-top: -6px;
+
 
     }
-    .axis-blip  {
-        position: absolute;
-        height: 30px;
-        box-shadow: 0px -10px 8px 10px white;
-        &:hover .blip {
-            border-color: lighten(@blipBorder, 5%);
-            background: darken(@blipBackground, 5%);
-            border: 2px solid @blipBorder;
-            transform: scale(1.5);
-        }
-        .blip {
-            border-radius: 10px;
-            border: 3px solid @blipBorder;
-            background: @blipBackground;
-            height: 12px;
-            width: 12px;
-            transition: all;
-            transition-duration: 0.4s;
-            margin-top:-8px;
-
-        }
-    }
+  }
 </style>

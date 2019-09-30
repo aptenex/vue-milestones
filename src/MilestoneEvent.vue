@@ -1,7 +1,15 @@
 <template lang="html">
 
-  <div class="milestone-event"  :style="pos" :class="{ active: hover }" @mouseenter="hover = true"  @mouseleave="hover = false">
-    <div class="milestone-card" >
+  <div
+      :class="{ active: active,
+                hover: hover,
+                rightAligned : rightAligned,
+                leftAligned : leftAligned }"
+      :style="pos"
+       @mouseenter="hover = true; activeEvent(milestone)"
+       @mouseleave="hover = false"
+       class="milestone-event">
+    <div class="milestone-card">
       {{milestone.title}}
     </div>
 
@@ -10,50 +18,70 @@
 </template>
 
 <script lang="js">
-  import moment from "moment";
-  import Util from "@/utils/Util";
+    import Moment from 'moment';
+    import PositionRatio from '@/utils/PositionRatio';
 
-  export default  {
-    name: 'milestone-event',
-    props: ['milestone'],
-    mounted() {
+    export default {
+        name: 'milestone-event',
+        props: ['milestone', 'active'],
+        mounted() {
 
-    },
-    data() {
-      return {
-        hover: false
-      }
-    },
-    methods: {
+        },
+        data() {
+            return {
+                hover: false,
+            };
+        },
+        methods: {
+            activeEvent(item) {
+                this.$emit('active-event', item);
+            },
+        },
+        inject: ['viewport'],
+        computed: {
+            pos() {
+                const left = PositionRatio(
+                    this.viewport.startDate,
+                    this.viewport.endDate,
+                    this.eventDate,
+                );
 
-    },
-    inject : [ 'viewport'],
-    computed: {
-      pos : function(){
-        // I'm not sure if I should do this. My thinking is, the axis blip can ONLY exist within a TimelineAxis
-        // So it's a dependant on that element, so why bother passing props?
-        console.log(this.viewport);
-        let left = Util.positionRatio(this.viewport.startDate, this.viewport.endDate, this.eventDate);
-        if(left >= 100){
-          return { right: 0 + '%' }
-        } else {
-          return {
-            left: left + '%'
-          }
-        }
-      },
+                if (left >= 100) {
+                    return { right: `${0}%` };
+                }
+                return {
+                    left: `${left}%`,
+                };
+            },
+            leftAligned() {
+                return !this.rightAligned;
+            },
+            rightAligned() {
+                const left = PositionRatio(
+                    this.viewport.startDate,
+                    this.viewport.endDate,
+                    this.eventDate,
+                );
 
-      eventDate: function(){
-        return  new moment(this.milestone.date);
-      },
-      root : function(){
-        return this.$root.$el;
-      }
-    }
-}
+                if (left >= 100) {
+                    return true;
+                }
+                return false;
+            },
+            eventDate() {
+                return new Moment(this.milestone.date);
+            },
+            root() {
+                return this.$root.$el;
+            },
+        },
+    };
 </script>
 
 <style scoped lang="less">
+
+  @import "less/_variables.less";
+
   .milestone-event {
 
     height: 140px;
@@ -61,27 +89,34 @@
     display: flex;
     position: absolute;
     // border-left: 1px solid red;
-    z-index: 1;
+
     border-radius: 3px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%);
     background-position-y: 10px;
     width: 1px;
 
+    &.rightAligned .milestone-card {
+      right: 0%;
+    }
+
     .milestone-card {
-      box-shadow: -5px 0px 3px -1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 2px 3px 3px rgba(0, 0, 0, 0.04);
       padding: 10px;
       background: #CCC;
       border-radius: 3px;
       vertical-align: middle;
       display: flex;
       top: 0px;
+      z-index: 1;
       position: absolute;
       white-space: nowrap;
 
+
     }
-    &.active .milestone-card{
+
+    &.hover .milestone-card {
       z-index: 10;
-      box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.1);
+      box-shadow: 0px 2px 3px 3px rgba(0, 0, 0, 0.1);
     }
   }
 </style>

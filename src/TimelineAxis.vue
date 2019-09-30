@@ -1,22 +1,27 @@
 <template lang="html">
 
-    <div class="timeline-axis">
-        <axis-now :date="now"></axis-now>
-        <axis-blip :date="startDate"></axis-blip>
-        <axis-blip :date="endDate"></axis-blip>
-        <axis-blip date="2017-01-02"></axis-blip>
+  <div class="timeline-axis">
+    <axis-now :date="now"></axis-now>
+    <axis-blip :tooltip="`Start of Booking`" :date="startDate"></axis-blip>
+    <axis-blip :tooltip="`End of Booking Lifecycle`" :date="endDate"></axis-blip>
 
-    </div>
+
+    <axis-blip :date="event.date"
+                  :row="events"
+                  v-bind:key="event.title"
+                  v-for="event in axisEvents"></axis-blip>
+
+  </div>
 
 </template>
 
 <script lang="js">
-    import AxisBlip from "@/AxisBlip";
-    import AxisNow from "@/AxisNow";
+    import AxisBlip from '@/AxisBlip.vue';
+    import AxisNow from '@/AxisNow.vue';
 
     export default {
         name: 'timeline-axis',
-        props: ['startDate', 'endDate', 'now'],
+        props: ['startDate', 'endDate', 'events', 'now'],
         components: {
             AxisBlip,
             AxisNow,
@@ -26,30 +31,41 @@
         },
         provide() {
             return {
-                bar : this
-            }
+                bar: this,
+            };
         },
 
 
         data() {
-            return {}
+            return {};
         },
-        methods: {},
-        computed: {}
-    }
+        methods: {
+            orderedRows(rows) {
+                return _.orderBy(rows, 'order', 'asc');
+            },
+            eventsMatchingRow(row) {
+                return this.events.filter(event => event.row === row.id);
+            },
+        },
+        computed: {
+            axisEvents() {
+                return this.events.filter(event => event.onAxis);
+            },
+        },
+    };
 </script>
 
 <style scoped lang="less">
-    @blipBorder : darken(#01c88b, 16%);
+  @import "less/_variables.less";
 
-    .timeline-axis {
-        border-top: 2px solid @blipBorder;
-        border-bottom: 2px solid @blipBorder;
-        min-height: 5px;
-        width: 100%;
-        border-radius: 4px;
+  .timeline-axis {
+    // border-top: 2px solid @blipBorder;
+    // border-bottom: 2px solid @blipBorder;
+    min-height: 5px;
+    width: 100%;
+    border-radius: 4px;
 
-        position: relative;
-        top:10px;
-    }
+    position: relative;
+    top: 10px;
+  }
 </style>

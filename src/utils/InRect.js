@@ -1,67 +1,22 @@
-import * as Moment from 'moment';
+import Position from './Position';
+import Width from './Width';
+import Height from './Height';
 
-export const height = elem => {
-  return elem.clientHeight;
-};
-
-const width = function (elem) {
-  return elem.clientWidth;
-};
-
-const inRect = function (elem, x = 0, y = 0, w = null, h = null) {
-  const endX = w ? w + x : document.body.clientWidth - x;
-  const endY = h ? h + y : document.body.clientWidth - y;
-
-  if (position(elem).left < x) {
-    return `transform:translateX(${x - position(elem).left}px)`;
-  } if (position(elem).left + width(elem) > endX) {
-    return `transform:translateX(${endX - (position(elem).left + width(elem))}px)`;
+export default function (elem, constrainedBox, x = 0, y = 0, w = null, h = null) {
+  const endX = w ? w + x : constrainedBox.clientWidth - x;
+  const endY = h ? h + y : constrainedBox.clientWidth - y;
+  console.log(constrainedBox.clientWidth, elem.clientLeft, elem.getBoundingClientRect(), constrainedBox.getBoundingClientRect());
+  if (Position(elem, constrainedBox).left < x) {
+    return `transform:translateX(${x - Position(elem, constrainedBox).left}px)`;
+  } if (Position(elem, constrainedBox).left + Width(elem) > endX) {
+    return `transform:translateX(${endX - (Position(elem, constrainedBox).left + Width(elem))}px)`;
   }
 
-  if (position(elem).top < y) {
-    return `transform:translateX(${x - position(elem).left}px)`;
-  } if (position(elem).top + height(elem) > endY) {
-    return `transform:translateX(${endY - (position(elem).top + height(elem))}px)`;
+  if (Position(elem, constrainedBox).top < y) {
+    return `transform:translateX(${x - Position(elem, constrainedBox).left}px)`;
   }
-};
-
-
-const position = function (elem) {
-  const box = elem.getBoundingClientRect();
-
-  const { body } = document;
-  const docEl = document.documentElement;
-
-  const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-  const scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-
-  const clientTop = docEl.clientTop || body.clientTop || 0;
-  const clientLeft = docEl.clientLeft || body.clientLeft || 0;
-
-  const top = box.top + scrollTop - clientTop;
-  const left = box.left + scrollLeft - clientLeft;
-
-  return {
-    top: Math.round(top),
-    left: Math.round(left),
-  };
-};
-
-const positionRatio = function(start, end, d) {
-  const viewportStart = Moment.isMoment(start) ? start : new Moment(start);
-  const viewportEnd = Moment.isMoment(end) ? end : new Moment(end);
-  const date = Moment.isMoment(d) ? d : new Moment(d);
-
-  const totalSizeAsHours = Moment.duration(viewportEnd.diff(viewportStart)).asHours();
-  const positionAlong = Moment.duration(date.diff(viewportStart)).asHours();
-  return 100 * (positionAlong / totalSizeAsHours);
+  if (Position(elem, constrainedBox).top + Height(elem) > endY) {
+    return `transform:translateX(${endY - (Position(elem, constrainedBox).top + Height(elem))}px)`;
+  }
+  return '';
 }
-
-
-module.exports = {
-  position,
-  positionRatio,
-  height,
-  width,
-  inRect,
-};

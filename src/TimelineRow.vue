@@ -1,48 +1,53 @@
 <template lang="html">
 
-  <div class="timeline-row" @mouseover="isHover = true"  @mouseleave="isHover = false">
+  <div class="timeline-row" @mouseover="isHover = true" @mouseleave="isHover = false">
     <div class="title" v-if="false">
       {{ row.title }} {{ _.filter(events).length }}
     </div>
     <div class="timeline-container">
-      <milestone-event :milestone="milestone" v-bind:key="milestone.id" v-for="milestone in events"></milestone-event>
+      <milestone-event  @active-event="activeEvent"
+                        :milestone="milestone"
+                        v-bind:key="milestone.id"
+                        v-for="milestone in events"></milestone-event>
     </div>
   </div>
 
 </template>
 
 <script lang="js">
-  import { store } from "@/Store";
-  import MilestoneEvent from "@/MilestoneEvent";
-  import _ from "lodash";
-  export default  {
-    name: 'timeline-row',
-    props: ['row', 'events' , 'startDate', 'endDate' ],
-    mounted() {
+    import _ from 'lodash';
+    import MilestoneEvent from '@/MilestoneEvent.vue';
 
-    },
- 
-    data() {
+    export default {
+        name: 'timeline-row',
+        props: ['row', 'events', 'startDate', 'endDate'],
+        mounted() {
 
-      return {
-        isHover : false
-      }
-    },
-    components : {
-      MilestoneEvent
-    },
-    methods: {
+        },
 
-    },
-    computed: {
-      _(){
-        return _;
-      }
-    }
-}
+        data() {
+            return {
+                isHover: false,
+            };
+        },
+        components: {
+            MilestoneEvent,
+        },
+        methods: {
+            activeEvent(e) {
+                this.$emit('active-event', e);
+            },
+        },
+        computed: {
+            _() {
+                return _;
+            },
+        },
+    };
 </script>
 
 <style scoped lang="less">
+  @import "less/_variables.less";
   .title {
     display: flex;
     align-items: center;
@@ -52,28 +57,34 @@
     min-width: 150px;
     background: white;
   }
+
   .timeline-container {
     display: flex;
+    padding-top: 5px;
     align-items: center;
     flex-grow: 1;
     position: relative;
     display: block;
     width: 100%;
   }
+
   .milestone-event {
     display: inline-block;
     display: flex;
     align-items: center;
   }
+
   .timeline-row {
-      min-height: 50px;
-      display: flex;
-      position: relative;
-      &:nth-child(odd) {
-          background: white;
-      }
-      &:nth-child(even) {
-          background: rgba(35, 113, 129, 0.05);
-      }
+    min-height: 50px;
+    display: flex;
+    position: relative;
+
+    &:nth-child(odd) {
+
+    }
+
+    &:nth-child(even) {
+      background: rgba(35, 113, 129, 0.05);
+    }
   }
 </style>

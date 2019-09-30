@@ -1,22 +1,9 @@
-import Position from './Position';
-import Width from './Width';
-import Height from './Height';
+export default function (el1, el2) {
+  const rect1 = el1.getBoundingClientRect();
+  const rect2 = el2.getBoundingClientRect();
 
-export default function (elem, constrainedBox, x = 0, y = 0, w = null, h = null) {
-  const endX = w ? w + x : constrainedBox.clientWidth - x;
-  const endY = h ? h + y : constrainedBox.clientWidth - y;
-  console.log(constrainedBox.clientWidth, elem.clientLeft, elem.getBoundingClientRect(), constrainedBox.getBoundingClientRect());
-  if (Position(elem, constrainedBox).left < x) {
-    return `transform:translateX(${x - Position(elem, constrainedBox).left}px)`;
-  } if (Position(elem, constrainedBox).left + Width(elem) > endX) {
-    return `transform:translateX(${endX - (Position(elem, constrainedBox).left + Width(elem))}px)`;
-  }
-
-  if (Position(elem, constrainedBox).top < y) {
-    return `transform:translateX(${x - Position(elem, constrainedBox).left}px)`;
-  }
-  if (Position(elem, constrainedBox).top + Height(elem) > endY) {
-    return `transform:translateX(${endY - (Position(elem, constrainedBox).top + Height(elem))}px)`;
-  }
-  return '';
+  return (
+    ((rect2.left <= rect1.left) && (rect1.left <= rect2.right))
+    && ((rect2.left <= rect1.right) && (rect1.right <= rect2.right))
+  );
 }
