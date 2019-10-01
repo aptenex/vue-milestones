@@ -7,7 +7,7 @@
             Hover a milestone to show description of that event.
         </div>
         <div class="viewport">
-            <timeline-row @active-event="selectActiveEvent"
+            <timeline-row
                           :startDate="startDate"
                           :endDate="endDate"
                           :events="eventsMatchingRow(row)"
@@ -28,6 +28,7 @@
     import TimelineRow from '@/TimelineRow.vue';
     import TimelineAxis from '@/TimelineAxis.vue';
     import ActiveEvent from '@/ActiveEvent.vue';
+    import EventBus from '@/EventBus';
 
     export default {
         name: 'milestone-timeline',
@@ -38,6 +39,20 @@
             } else {
                 this.now = typeof this.eventsData.now.getMonth === 'function' ? this.eventsData.now : new Date(this.eventsData.now);
             }
+
+            EventBus.$on('activeEventChanged', (timelineEvent) => {
+                this.selectActiveEvent(timelineEvent)
+
+                _.each(this.eventsData.rows, function (item) {
+                    if (timelineEvent.key === item.key) {
+                        itme.active = true;
+                    } else {
+                        item.active = false;
+                    }
+                });
+
+                timelineEvent.active = true;
+            });
         },
         components: {
             ActiveEvent,

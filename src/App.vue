@@ -16,6 +16,7 @@
                 eventsData: {
                     events: [
                         {
+                            key: 'booked',
                             date: '2019-08-01',
                             title: 'Booked Date ',
                             row: 'booking',
@@ -36,16 +37,19 @@
                             onAxis: true,
                         },
                         {
+                            key: 'owner-due-date',
                             date: '2019-12-25',
                             title: 'Pay Owner',
                             row: 'payments',
                         },
                         {
+                            key: 'guest-deposit-due',
                             date: '2019-08-01',
                             title: 'Deposit Due',
                             row: 'payments',
                         },
                         {
+                            key: 'guest-balance-due',
                             date: '2019-09-01',
                             title: 'Balance Due',
                             row: 'payments',

@@ -21,6 +21,7 @@
 <script lang="js">
     import Moment from 'moment';
     import PositionRatio from '@/utils/PositionRatio';
+    import EventBus from '@/EventBus';
 
     export default {
         name: 'milestone-event',
@@ -36,13 +37,13 @@
         methods: {
             onMouseEnter() {
                 this.hover = true;
-                this.activeEvent(this.milestone);
+                this.selectActiveEvent(this.milestone);
             },
             onMouseLeave() {
                 this.hover = false;
             },
-            activeEvent(item) {
-                this.$emit('active-event', item);
+            selectActiveEvent(item) {
+                EventBus.$emit('activeEventChanged', item);
             },
         },
         inject: ['viewport'],

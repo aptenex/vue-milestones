@@ -8,7 +8,7 @@
         <axis-blip :date="event.date"
                    :event="event"
                    v-bind:key="event.title"
-                   v-on:update:active="updateActive(event, $event)"
+                   v-on:update:active="selectActiveEvent(event, $event)"
                    v-for="event in axisEvents"></axis-blip>
 
     </div>
@@ -18,6 +18,7 @@
 <script lang="js">
     import AxisBlip from '@/AxisBlip.vue';
     import AxisNow from '@/AxisNow.vue';
+    import EventBus from '@/EventBus';
 
     export default {
         name: 'timeline-axis',
@@ -40,8 +41,8 @@
             return {};
         },
         methods: {
-            updateActive(event, a) {
-                event.active = a;
+            selectActiveEvent(event) {
+                EventBus.$emit('activeEventChanged', event);
             },
             orderedRows(rows) {
                 return _.orderBy(rows, 'order', 'asc');

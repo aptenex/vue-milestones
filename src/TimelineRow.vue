@@ -17,6 +17,7 @@
 <script lang="js">
     import _ from 'lodash';
     import MilestoneEvent from '@/MilestoneEvent.vue';
+    import EventBus from '@/EventBus';
 
     export default {
         name: 'timeline-row',
@@ -24,7 +25,6 @@
         mounted() {
 
         },
-
         data() {
             return {
                 isHover: false,
@@ -34,8 +34,8 @@
             MilestoneEvent,
         },
         methods: {
-            activeEvent(e) {
-                this.$emit('active-event', e);
+            activeEvent(event) {
+                EventBus.$emit('activeEventChanged', event);
             },
         },
         computed: {
