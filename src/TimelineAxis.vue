@@ -1,17 +1,17 @@
 <template lang="html">
 
-  <div class="timeline-axis">
-    <axis-now :date="now"></axis-now>
-    <axis-blip :tooltip="`Start of Booking`" :date="startDate"></axis-blip>
-    <axis-blip :tooltip="`End of Booking Lifecycle`" :date="endDate"></axis-blip>
+    <div class="timeline-axis">
+        <axis-now :date="now"></axis-now>
+        <axis-blip :tooltip="`Start of Booking`" :date="startDate"></axis-blip>
+        <axis-blip :tooltip="`End of Booking Lifecycle`" :date="endDate"></axis-blip>
 
+        <axis-blip :date="event.date"
+                   :event="event"
+                   v-bind:key="event.title"
+                   v-on:update:active="updateActive(event, $event)"
+                   v-for="event in axisEvents"></axis-blip>
 
-    <axis-blip :date="event.date"
-                  :row="events"
-                  v-bind:key="event.title"
-                  v-for="event in axisEvents"></axis-blip>
-
-  </div>
+    </div>
 
 </template>
 
@@ -40,6 +40,9 @@
             return {};
         },
         methods: {
+            updateActive(event, a) {
+                event.active = a;
+            },
             orderedRows(rows) {
                 return _.orderBy(rows, 'order', 'asc');
             },
@@ -56,16 +59,16 @@
 </script>
 
 <style scoped lang="less">
-  @import "less/_variables.less";
+    @import "less/_variables.less";
 
-  .timeline-axis {
-    // border-top: 2px solid @blipBorder;
-    // border-bottom: 2px solid @blipBorder;
-    min-height: 5px;
-    width: 100%;
-    border-radius: 4px;
+    .timeline-axis {
+        // border-top: 2px solid @blipBorder;
+        // border-bottom: 2px solid @blipBorder;
+        min-height: 5px;
+        width: 100%;
+        border-radius: 4px;
 
-    position: relative;
-    top: 10px;
-  }
+        position: relative;
+        top: 10px;
+    }
 </style>

@@ -1,3 +1,3 @@
 export default function (elem) {
-  return elem.clientHeight;
+    return elem.clientHeight;
 }
