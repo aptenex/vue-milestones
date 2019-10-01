@@ -41,14 +41,10 @@
             }
 
             EventBus.$on('activeEventChanged', (timelineEvent) => {
-                this.selectActiveEvent(timelineEvent)
+                this.selectActiveEvent(timelineEvent);
 
-                _.each(this.eventsData.rows, function (item) {
-                    if (timelineEvent.key === item.key) {
-                        itme.active = true;
-                    } else {
-                        item.active = false;
-                    }
+                _.each(this.eventsData.rows, (item) => {
+                    item.active = timelineEvent.key === item.key;
                 });
 
                 timelineEvent.active = true;
@@ -62,7 +58,7 @@
         data() {
             return {
                 activeEvent: null,
-                now: null
+                now: null,
             };
         },
         provide() {
