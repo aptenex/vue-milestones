@@ -7,15 +7,14 @@
             Hover a milestone to show description of that event.
         </div>
         <div class="viewport">
-            <timeline-row @active-event="activeEventBus"
-                          :event="event"
+            <timeline-row @active-event="selectActiveEvent"
                           :startDate="startDate"
                           :endDate="endDate"
                           :events="eventsMatchingRow(row)"
                           :row="row" v-bind:key="row.id"
-                          v-for="row in orderedRows(state.rows)"></timeline-row>
+                          v-for="row in orderedRows(eventsData.rows)"></timeline-row>
         </div>
-        <timeline-axis :events="state.events" :now="now" :startDate="startDate"
+        <timeline-axis :events="eventsData.events" :now="now" :startDate="startDate"
                        :endDate="endDate"></timeline-axis>
     </section>
 
@@ -27,18 +26,17 @@
     import _ from 'lodash';
     import Moment from 'moment';
     import TimelineRow from '@/TimelineRow.vue';
-    import Store from '@/Store/Store';
     import TimelineAxis from '@/TimelineAxis.vue';
     import ActiveEvent from '@/ActiveEvent.vue';
 
     export default {
         name: 'milestone-timeline',
-        props: ['event'],
+        props: ['eventsData'],
         mounted() {
-            if (!this.state.now) {
+            if (this.eventsData === undefined || this.eventsData.now === undefined) {
                 this.now = new Date();
             } else {
-                this.now = typeof this.state.now.getMonth === 'function' ? this.state.now : new Date(this.state.now);
+                this.now = typeof this.eventsData.now.getMonth === 'function' ? this.eventsData.now : new Date(this.eventsData.now);
             }
         },
         components: {
@@ -49,8 +47,7 @@
         data() {
             return {
                 activeEvent: null,
-                state: Store,
-                now: null,
+                now: null
             };
         },
         provide() {
@@ -62,7 +59,7 @@
             };
         },
         methods: {
-            activeEventBus(event) {
+            selectActiveEvent(event) {
                 this.activeEvent = event;
                 this.now = event.date;
             },
@@ -70,15 +67,15 @@
                 return _.orderBy(rows, 'order', 'asc');
             },
             eventsMatchingRow(row) {
-                return this.state.events.filter(event => event.row === row.id);
+                return this.eventsData.events.filter(event => event.row === row.id);
             },
         },
         computed: {
             startDate() {
-                return _.orderBy(this.state.events, e => new Moment(e.date).format('YYYYMMDD'), ['asc'])[0].date;
+                return _.orderBy(this.eventsData.events, e => new Moment(e.date).format('YYYYMMDD'), ['asc'])[0].date;
             },
             endDate() {
-                return _.orderBy(this.state.events, e => new Moment(e.date).format('YYYYMMDD'), ['desc'])[0].date;
+                return _.orderBy(this.eventsData.events, e => new Moment(e.date).format('YYYYMMDD'), ['desc'])[0].date;
             },
         },
     };
