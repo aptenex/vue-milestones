@@ -13,10 +13,9 @@
 
 <script lang="js">
     import Moment from 'moment';
-    import AxisBlip from '@/AxisBlip.vue';
-    import PositionRatio from '@/utils/PositionRatio';
+    import AxisBlip from './AxisBlip.vue';
+    import PositionRatio from './utils/PositionRatio';
     import Position from './utils/Position';
-    import InRect from './utils/InRect';
     import Inside from './utils/Inside';
 
     export default {

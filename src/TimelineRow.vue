@@ -16,8 +16,8 @@
 
 <script lang="js">
     import _ from 'lodash';
-    import MilestoneEvent from '@/MilestoneEvent.vue';
-    import EventBus from '@/EventBus';
+    import MilestoneEvent from './MilestoneEvent.vue';
+    import EventBus from './EventBus';
 
     export default {
         name: 'timeline-row',

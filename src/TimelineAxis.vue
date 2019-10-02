@@ -16,9 +16,9 @@
 </template>
 
 <script lang="js">
-    import AxisBlip from '@/AxisBlip.vue';
-    import AxisNow from '@/AxisNow.vue';
-    import EventBus from '@/EventBus';
+    import AxisBlip from './AxisBlip.vue';
+    import AxisNow from './AxisNow.vue';
+    import EventBus from './EventBus';
 
     export default {
         name: 'timeline-axis',

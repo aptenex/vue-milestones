@@ -25,10 +25,10 @@
 
     import _ from 'lodash';
     import Moment from 'moment';
-    import TimelineRow from '@/TimelineRow.vue';
-    import TimelineAxis from '@/TimelineAxis.vue';
-    import ActiveEvent from '@/ActiveEvent.vue';
-    import EventBus from '@/EventBus';
+    import TimelineRow from './TimelineRow.vue';
+    import TimelineAxis from './TimelineAxis.vue';
+    import ActiveEvent from './ActiveEvent.vue';
+    import EventBus from './EventBus';
 
     export default {
         name: 'milestone-timeline',

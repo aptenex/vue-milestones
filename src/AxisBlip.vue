@@ -12,7 +12,7 @@
     import { VTooltip, VPopover, VClosePopover } from 'v-tooltip';
     import Moment from 'moment';
     import Vue from 'vue';
-    import PositionRatio from '@/utils/PositionRatio';
+    import PositionRatio from './utils/PositionRatio';
 
     Vue.directive('tooltip', VTooltip);
     Vue.directive('close-popover', VClosePopover);
@@ -60,7 +60,7 @@
                 // So it's a dependant on that element, so why bother passing props?
                 const left = PositionRatio(this.barStart, this.barEnd, this.blipDate);
                 if (left >= 100) {
-                    return {right: `${0}%`};
+                    return { right: `${0}%` };
                 }
                 return {
                     left: `${left}%`,

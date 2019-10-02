@@ -4,7 +4,7 @@
 </template>
 
 <script>
-    import MilestoneTimeline from '@/MilestoneTimeline.vue';
+    import MilestoneTimeline from './MilestoneTimeline.vue';
 
     export default {
         name: 'app',
@@ -32,7 +32,7 @@
                         {
                             key: 'departure',
                             date: '2019-10-07',
-                            title: 'Departure Date ',
+                            title: 'Departure Dates',
                             row: 'base',
                             onAxis: true,
                         },
@@ -42,18 +42,6 @@
                             title: 'Pay Owner',
                             row: 'payments',
                         },
-                        {
-                            key: 'guest-deposit-due',
-                            date: '2019-08-01',
-                            title: 'Deposit Due',
-                            row: 'payments',
-                        },
-                        {
-                            key: 'guest-balance-due',
-                            date: '2019-09-01',
-                            title: 'Balance Due',
-                            row: 'payments',
-                        }
 
                     ],
                     rows: [
@@ -71,11 +59,11 @@
                             id: 'payments',
                             title: 'Payments',
                             order: 1,
-                        }
-                    ]
-                }
-            }
-        }
+                        },
+                    ],
+                },
+            };
+        },
     };
 </script>
 

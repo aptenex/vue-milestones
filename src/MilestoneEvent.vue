@@ -21,8 +21,8 @@
 
 <script lang="js">
     import Moment from 'moment';
-    import PositionRatio from '@/utils/PositionRatio';
-    import EventBus from '@/EventBus';
+    import PositionRatio from './utils/PositionRatio';
+    import EventBus from './EventBus';
 
     export default {
         name: 'milestone-event',
@@ -33,7 +33,6 @@
                 if (timelineEvent === this.milestone) {
                     this.active = true;
                 }
-
             });
         },
         data() {
@@ -65,7 +64,7 @@
                 );
 
                 if (left >= 100) {
-                    return {right: `${0}%`};
+                    return { right: `${0}%` };
                 }
                 return {
                     left: `${left}%`,
