@@ -1,5 +1,5 @@
 <template>
-    <milestone-timeline id="app" :eventsData="eventsData">
+    <milestone-timeline id="app" :event-data="eventsData">
     </milestone-timeline>
 </template>
 
@@ -16,9 +16,17 @@
                 eventsData: {
                     events: [
                         {
+                            type: 'icon',
+                            date: '2019-08-01',
+                            title: 'Not',
+                            row: 'notifications',
+                        },
+                        {
                             key: 'booked',
                             date: '2019-08-01',
                             title: 'Booked Date ',
+                            className : 'none',
+                            label: '<i style="background:red;height:10px;width:10px;">',
                             row: 'booking',
                         },
                         {
@@ -46,9 +54,14 @@
                     ],
                     rows: [
                         {
+                            id: 'notifications',
+                            title: 'Notifications',
+                            order: 3,
+                        },
+                        {
                             id: 'booking',
                             title: 'Booking',
-                            order: 3,
+                            order: 2,
                         },
                         {
                             id: 'base',

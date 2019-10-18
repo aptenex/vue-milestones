@@ -70,6 +70,6 @@
         border-radius: 4px;
 
         position: relative;
-        top: 10px;
+        top: 4px;
     }
 </style>

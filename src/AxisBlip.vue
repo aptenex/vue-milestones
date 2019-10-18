@@ -81,11 +81,17 @@
         .blip {
             margin-left: -8px;
         }
+        &.axis-blip {
+            transform: translateX(0);
+        }
     }
 
     .right-aligned {
         .blip {
-            margin-right: -10px;
+            margin-right: -8px;
+        }
+        &.axis-blip {
+            transform: translateX(0);
         }
 
         .date {
@@ -114,10 +120,10 @@
     .axis-blip {
         position: absolute;
         height: 30px;
-
+        z-index:2;
 
         top: -25%;
-        transform: translateX(-6px);
+        transform: translateX(-8px);
 
         &:hover .blip {
             border-color: lighten(@blipBorder, 5%);
@@ -127,6 +133,7 @@
         }
 
         .blip {
+            box-sizing: content-box !important;
             border-radius: 10px;
             border: 3px solid @primary;
             box-shadow: 0px 0px 5px 5px rgba(255, 255, 255, 0.3);
@@ -140,4 +147,7 @@
 
         }
     }
+
+
+
 </style>

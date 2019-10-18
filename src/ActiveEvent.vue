@@ -1,7 +1,7 @@
 <template lang="html">
 
-    <section class="active-event">
-        <p style="float:right;">{{event.description}}</p>
+    <section class="active-event" v-html="event.title">
+        <span style="float:right;">{{event.description}}</span>
         {{event.title}} at {{event.date | toHuman}}
 
     </section>

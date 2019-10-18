@@ -88,12 +88,14 @@
     .now-label {
         position: absolute;
         white-space: nowrap;
-        top: 25px;
+        top: 20px;
         color: #AAA;
         font-size: 0.9em;
     }
 
     .axis-now {
+        :hover {
+        }
         position: relative;
 
         .bar {
@@ -108,9 +110,10 @@
         }
 
         .arrow {
+            pointer-events: none;
             z-index: 1;
             display: inline-block;
-            border-top: 12px solid transparent;
+            border-top: 2px solid transparent;
             border-left: 12px solid transparent;
             border-right: 12px solid transparent;
             border-bottom: 14px solid @primary;

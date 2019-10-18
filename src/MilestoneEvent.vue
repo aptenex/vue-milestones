@@ -8,11 +8,10 @@
         :style="pos"
         @mouseenter="onMouseEnter"
         @mouseleave="onMouseLeave"
+
         class="milestone-event">
-        <div :class="{
-                'milestone-card' : true
-                }">
-            {{milestone.title}}
+        <div  v-html="computedHtml" :class="'milestone-card ' + cardClass">
+            {{ computedHtml }}
         </div>
 
     </div>
@@ -26,7 +25,7 @@
 
     export default {
         name: 'milestone-event',
-        props: ['milestone'],
+        props: ['milestone', 'order'], // order = row order
         mounted() {
             EventBus.$on('activeEventChanged', (timelineEvent) => {
                 this.active = false;
@@ -56,6 +55,12 @@
         },
         inject: ['viewport'],
         computed: {
+            cardClass(){
+              return this.milestone.className ? this.milestone.className + ' ' : 'default ';
+            },
+            computedHtml() {
+                return this.milestone.label ? this.milestone.label : this.milestone.title;
+            },
             pos() {
                 const left = PositionRatio(
                     this.viewport.startDate,
@@ -64,10 +69,11 @@
                 );
 
                 if (left >= 100) {
-                    return { right: `${0}%` };
+                    return { right: `${0}%`, height: `${(this.order + 1) * 38}px` };
                 }
                 return {
                     left: `${left}%`,
+                    height: `${(this.order + 1) * 38}px`,
                 };
             },
             leftAligned() {
@@ -100,8 +106,8 @@
     @import "less/_variables.less";
 
     .milestone-event {
+        height: 40px;
 
-        height: 140px;
         align-items: flex-start;
         display: flex;
         position: absolute;
@@ -117,10 +123,8 @@
             right: 0%;
         }
 
+
         .milestone-card {
-            box-shadow: 0px 2px 3px 3px rgba(0, 0, 0, 0.04);
-            padding: 10px;
-            background: #CCC;
             border-radius: 3px;
             vertical-align: middle;
             display: flex;
@@ -129,9 +133,14 @@
             position: absolute;
             white-space: nowrap;
             transition: background-color ease-in-out 0.3s;
+            &.default {
+                box-shadow: 0px 2px 3px 3px rgba(0, 0, 0, 0.04);
+                padding: 6px 10px;
+                background: #CCC;
+            }
         }
 
-        &.hover .milestone-card {
+        &.hover .milestone-card.default {
             z-index: 10;
             box-shadow: 0px 2px 3px 3px rgba(0, 0, 0, 0.1);
         }
@@ -141,7 +150,7 @@
 
 
             /* Radial Out */
-            .milestone-card {
+            .milestone-card.default {
                 background: @primary;
                 color: white;
             }

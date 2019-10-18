@@ -7,6 +7,7 @@
         <div class="timeline-container">
             <milestone-event @active-event="activeEvent"
                              :milestone="milestone"
+                             :order="row.order"
                              v-bind:key="milestone.id"
                              v-for="milestone in events"></milestone-event>
         </div>
@@ -76,7 +77,7 @@
     }
 
     .timeline-row {
-        min-height: 50px;
+        min-height: 44px;
         display: flex;
         position: relative;
 
